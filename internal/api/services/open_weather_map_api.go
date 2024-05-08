@@ -25,7 +25,6 @@ type WeatherData struct {
 	Wind struct {
 		Speed float64 `json:"speed"`
 		Deg   int     `json:"deg"`
-		Gust  float64 `json:"gust"`
 	} `json:"wind"`
 	Name string `json:"name"`
 }
@@ -68,8 +67,7 @@ func GetWeather(lat float64, lon float64) (WeatherData, error) {
 func GetLatLonData(city string, state string, country string) ([]LatLonResponse, error) {
 	apiURL := fmt.Sprintf("%s/geo/1.0/direct?q=%s,%s,%s&appid=%s", openWeatherMapApiUrl, city, state, country, os.Getenv("OPEN_WEATHER_MAP_API_KEY"))
 
-	req, err := http.NewRequest(http.MethodGet, apiURL, nil)
-	response, err := http.DefaultClient.Do(req)
+	response, err := http.Get(apiURL)
 	if err != nil {
 		return []LatLonResponse{}, err
 	}
